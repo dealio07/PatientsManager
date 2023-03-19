@@ -1,0 +1,6 @@
+<div class="row csv-uploader">
+  <div class="col-md-3">
+    <input type="file" #fileInput placeholder="Choose file" (change)="upload(fileInput.files)" class="file-input">
+    <button mat-raised-button color="primary" type="button" class="btn btn-success" (click)="fileInput.click()">Upload patients</button>
+  </div>
+</div>

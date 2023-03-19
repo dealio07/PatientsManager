@@ -1,0 +1,96 @@
+<!-- Filter -->
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input matInput (keyup)="filterPatients($event)" #filter>
+</mat-form-field>
+
+<!-- Table with patients -->
+<table mat-table matSort [dataSource]="patients" class="mat-elevation-z8">
+  <ng-container matColumnDef="firstName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">First Name</th>
+    <td mat-cell *matCellDef="let patient" class="patient-name">
+      <span *ngIf="!patient.isEditing">{{ patient.firstName }}</span>
+      <span *ngIf="patient.isEditing">
+        <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
+          <mat-label>First Name:</mat-label>
+          <br/>
+          <input matInput [(ngModel)]="patient.firstName" type="text">
+        </mat-form-field>
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="lastName">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by last name">Last Name</th>
+    <td mat-cell *matCellDef="let patient" class="patient-name">
+      <span *ngIf="!patient.isEditing">{{ patient.lastName }}</span>
+      <span *ngIf="patient.isEditing">
+        <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
+          <mat-label>Last Name:</mat-label>
+          <br/>
+          <input matInput [(ngModel)]="patient.lastName" type="text">
+        </mat-form-field>
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="birthday">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by birthday">Birthday</th>
+    <td mat-cell *matCellDef="let patient" class="patient-field">
+      <span *ngIf="!patient.isEditing">{{ patient.birthday | date: "MM/dd/yyyy"}}</span>
+      <span *ngIf="patient.isEditing">
+        <mat-form-field appearance="fill" class="patient-birthday-input margin-5" #field>
+          <mat-label>Birthday:</mat-label>
+          <br/>
+          <input matInput [(ngModel)]="patient.birthday" [matDatepicker]="picker">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="gender">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gender">Gender</th>
+    <td mat-cell *matCellDef="let patient" class="patient-field">
+      <span *ngIf="!patient.isEditing">{{getPatientGender(patient.gender)}}</span>
+      <span *ngIf="patient.isEditing">
+        <mat-form-field appearance="fill" class="margin-5" #field>
+          <mat-label>Gender:</mat-label>
+          <br/>
+          <mat-select [(value)]="patient.gender">
+            <mat-option *ngFor="let patientType of genderEnumValues" [value]=patientType.gender>
+              {{patientType.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let patient">
+      <button mat-icon-button (click)="updatePatient(patient)">
+        <mat-icon aria-hidden="false" color="primary">edit</mat-icon>
+      </button>
+      <button mat-icon-button (click)="removePatient(patient)">
+        <mat-icon aria-hidden="false" color="warn">delete_outline</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="patientTableColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: patientTableColumns;" (click)="onRowClick($event)"></tr>
+
+  <ng-container >
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">
+        {{!!patients.data && patients.data.length > 0 ? 'No data matching the filter "' + filter.value + '"' : ''}}
+      </td>
+    </tr>
+  </ng-container>
+</table>
+<mat-paginator [pageSizeOptions]="pageSizeOptions"
+               [pageSize]="pageSize"
+               [length]="patients.data.length"
+               showFirstLastButtons
+               aria-label="Select page of patients">
+</mat-paginator>

@@ -1,0 +1,10 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/
+global.json
+Utility/
+PatientsManager/ClientApp/package-lock.json
+PatientsManager/ClientApp/.angular/
