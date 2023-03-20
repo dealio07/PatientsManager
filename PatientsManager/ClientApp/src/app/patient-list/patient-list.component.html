@@ -85,13 +85,11 @@
   <mat-header-row *matHeaderRowDef="patientTableColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: patientTableColumns;" (click)="onRowClick($event)"></mat-row>
 
-  <ng-container >
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">
-        {{!!patients.data && patients.data.length > 0 ? 'No data matching the filter "' + filter.value + '"' : ''}}
-      </td>
-    </tr>
-  </ng-container>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">
+      {{!!filter.value && filter.value.length > 0 ? 'No data matching the filter "' + filter.value + '"' : ''}}
+    </td>
+  </tr>
 </mat-table>
 
 <mat-paginator [pageSizeOptions]="pageSizeOptions"
