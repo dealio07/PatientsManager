@@ -7,7 +7,7 @@ using CsvHelper.Configuration.Attributes;
 
 namespace PatientsManager.Models
 {
-    public class PatientDTO
+    public class PatientDto
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

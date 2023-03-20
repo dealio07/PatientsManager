@@ -2,7 +2,7 @@
 
 namespace PatientsManager.Models
 {
-    public sealed class PatientDTOMap : ClassMap<PatientDTO>
+    public sealed class PatientDTOMap : ClassMap<PatientDto>
     {
         public PatientDTOMap()
         {

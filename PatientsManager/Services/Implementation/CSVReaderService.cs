@@ -12,7 +12,7 @@ namespace PatientsManager.Services.Implementation
 {
     public class CsvReaderService : ICsvReader
     {
-        public List<PatientDTO> ReadPatientsData(IFormFile file)
+        public List<PatientDto> ReadPatientsData(IFormFile file)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
@@ -24,11 +24,11 @@ namespace PatientsManager.Services.Implementation
             using var csvReader = new CsvReader(streamReader, config);
             csvReader.Context.RegisterClassMap<PatientDTOMap>();
 
-            var patients = csvReader.GetRecords<PatientDTO>();
+            var patients = csvReader.GetRecords<PatientDto>();
 
             // Convert the CSV data to Patient entities and save to MongoDB
             return patients.Select(patient =>
-                new PatientDTO
+                new PatientDto
                 {
                     FirstName = patient.FirstName,
                     LastName = patient.LastName,

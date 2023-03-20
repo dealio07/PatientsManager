@@ -32,4 +32,8 @@ export class PatientDialogComponent {
     }
     this.dialogRef.close();
   }
+
+  showMoreButtons(): boolean {
+    return !!this.actionAccepted || !!this.actionRejected;
+  }
 }

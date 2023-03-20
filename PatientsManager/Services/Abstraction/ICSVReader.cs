@@ -6,6 +6,6 @@ namespace PatientsManager.Services.Abstraction
 {
     public interface ICsvReader
     {
-        public List<PatientDTO> ReadPatientsData(IFormFile file);
+        public List<PatientDto> ReadPatientsData(IFormFile file);
     }
 }

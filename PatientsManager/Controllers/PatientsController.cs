@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientsManager.Models;
@@ -20,7 +21,15 @@ namespace PatientsManager.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPatients()
         {
-            return Ok(await _patientService.Get());
+            try
+            {
+                var allPatients = await _patientService.GetAll();
+                return Ok(allPatients);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error during retrieval of all patients");
+            }
         }
 
         [HttpPost("upload-csv")]
@@ -31,59 +40,57 @@ namespace PatientsManager.Controllers
                 return BadRequest("No file was sent");
             }
 
-            return Ok(await _patientService.CreatePatients(file));
-        }
-        
-        [HttpGet("{id:length(24)}")]
-        public async Task<IActionResult> Get(string id)
-        {
-            var item = await _patientService.Get(id);
-
-            if (item == null)
+            try
             {
-                return NotFound();
+                await _patientService.CreatePatients(file);
+                return Ok();
             }
-
-            return Ok(item);
-        }
-        
-        [HttpPost("create")]
-        public async Task<IActionResult> Create(PatientDTO patientDto)
-        {
-            if (patientDto == null)
+            catch (Exception e)
             {
-                return BadRequest("There is no patient to add");
+                return BadRequest("Error during file upload");
             }
-
-            return Ok(await _patientService.Create(patientDto));
         }
 
         [HttpPost("update/{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, PatientDTO patientDtoIn)
+        public async Task<IActionResult> Update(string id, PatientDto patientDtoIn)
         {
-            var item = await _patientService.Get(id);
-
-            if (item == null)
+            try
             {
-                return NotFound();
-            }
+                var item = await _patientService.Get(id);
 
-            return Ok(await _patientService.Update(id, patientDtoIn));
+                if (item == null)
+                {
+                    return NotFound();
+                }
+
+                await _patientService.Update(id, patientDtoIn);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error during patient update");
+            }
         }
 
         [HttpPost("delete/{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var item = await _patientService.Get(id);
-
-            if (item == null)
+            try
             {
-                return NotFound();
+                var item = await _patientService.Get(id);
+
+                if (item == null)
+                {
+                    return NotFound();
+                }
+
+                await _patientService.Remove(item.Id);
+                return Ok();
             }
-
-            await _patientService.Remove(item.Id);
-
-            return Ok();
+            catch (Exception e)
+            {
+                return BadRequest("Error during patient delete");
+            }
         }
     }
 }

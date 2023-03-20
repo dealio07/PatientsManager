@@ -1,6 +1,11 @@
 <h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>{{content}}</div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onRejected()">No</button>
-  <button mat-button (click)="onAccepted()">Yes</button>
+  <ng-container *ngIf="showMoreButtons()">
+    <button mat-button (click)="onRejected()">No</button>
+    <button mat-button (click)="onAccepted()">Yes</button>
+  </ng-container>
+  <ng-container *ngIf="!showMoreButtons()">
+    <button mat-button mat-dialog-close>Ok</button>
+  </ng-container>
 </div>
