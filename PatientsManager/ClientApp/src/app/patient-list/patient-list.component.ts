@@ -49,7 +49,7 @@ export class PatientListComponent {
     gender: new FormControl('', [Validators.required])
   });
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, private dialog: MatDialog) {}
+  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.getPatients();
@@ -105,7 +105,7 @@ export class PatientListComponent {
     patient.birthday = this.form.get("birthday")?.value;
     patient.gender = this.form.get("gender")?.value;
 
-    this.http.post(`${this.baseUrl}${this.baseUrlPatients}/update/${patient.id}`, patient)
+    this.http.put(`${this.baseUrl}${this.baseUrlPatients}/update/${patient.id}`, patient)
       .pipe(catchError(this.handleError<Object>))
       .subscribe(
         () => {

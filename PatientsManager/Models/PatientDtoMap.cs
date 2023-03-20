@@ -2,9 +2,9 @@
 
 namespace PatientsManager.Models
 {
-    public sealed class PatientDTOMap : ClassMap<PatientDto>
+    public sealed class PatientDtoMap : ClassMap<PatientDto>
     {
-        public PatientDTOMap()
+        public PatientDtoMap()
         {
             Map(m => m.FirstName).Name("First Name");
             Map(m => m.LastName).Name("Last Name");

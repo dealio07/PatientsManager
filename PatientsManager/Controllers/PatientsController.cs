@@ -51,7 +51,7 @@ namespace PatientsManager.Controllers
             }
         }
 
-        [HttpPost("update/{id:length(24)}")]
+        [HttpPut("update/{id:length(24)}")]
         public async Task<IActionResult> Update(string id, PatientDto patientDtoIn)
         {
             try

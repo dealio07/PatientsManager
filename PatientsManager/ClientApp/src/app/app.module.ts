@@ -9,6 +9,7 @@ import {NavMenuComponent} from './nav-menu/nav-menu.component';
 import {PatientsComponent} from './patients/patients.component';
 import {PatientCsvUploaderComponent} from './patient-csv-uploader/patient-csv-uploader.component';
 import {PatientListComponent} from './patient-list/patient-list.component';
+import {PatientDialogComponent} from './patient-dialog/patient-dialog.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
@@ -23,7 +24,6 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
-import { PatientDialogComponent } from './patient-dialog/patient-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import {CdkColumnDef} from "@angular/cdk/table";
 

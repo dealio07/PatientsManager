@@ -22,7 +22,7 @@ namespace PatientsManager.Services.Implementation
             // Read the CSV file and parse the data
             using var streamReader = new StreamReader(file.OpenReadStream());
             using var csvReader = new CsvReader(streamReader, config);
-            csvReader.Context.RegisterClassMap<PatientDTOMap>();
+            csvReader.Context.RegisterClassMap<PatientDtoMap>();
 
             var patients = csvReader.GetRecords<PatientDto>();
 
