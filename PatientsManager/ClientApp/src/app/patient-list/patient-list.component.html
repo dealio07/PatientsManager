@@ -11,11 +11,15 @@
     <td mat-cell *matCellDef="let patient" class="patient-name">
       <span *ngIf="!patient.isEditing">{{ patient.firstName }}</span>
       <span *ngIf="patient.isEditing">
-        <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
-          <mat-label>First Name:</mat-label>
-          <br/>
-          <input matInput [(ngModel)]="patient.firstName" type="text">
-        </mat-form-field>
+        <form [formGroup]="form" novalidate>
+          <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
+            <mat-label>First Name:</mat-label>
+            <br/>
+            <input matInput type="text" id="firstName" placeholder="Enter first name" formControlName="firstName">
+            <mat-error *ngIf="showFormError('firstName', 'required')">First name is required</mat-error>
+            <mat-error *ngIf="showFormError('firstName', 'maxlength')">Limit exceed</mat-error>
+          </mat-form-field>
+        </form>
       </span>
     </td>
   </ng-container>
@@ -24,11 +28,15 @@
     <td mat-cell *matCellDef="let patient" class="patient-name">
       <span *ngIf="!patient.isEditing">{{ patient.lastName }}</span>
       <span *ngIf="patient.isEditing">
-        <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
-          <mat-label>Last Name:</mat-label>
-          <br/>
-          <input matInput [(ngModel)]="patient.lastName" type="text">
-        </mat-form-field>
+        <form [formGroup]="form" novalidate>
+          <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
+            <mat-label>Last Name:</mat-label>
+            <br/>
+            <input matInput type="text" id="lastName" placeholder="Enter last name" formControlName="lastName">
+            <mat-error *ngIf="showFormError('lastName', 'required')">Last name is required</mat-error>
+            <mat-error *ngIf="showFormError('lastName', 'maxlength')">Limit exceed</mat-error>
+          </mat-form-field>
+        </form>
       </span>
     </td>
   </ng-container>
@@ -37,14 +45,17 @@
     <td mat-cell *matCellDef="let patient" class="patient-field">
       <span *ngIf="!patient.isEditing">{{ patient.birthday | date: "MM/dd/yyyy"}}</span>
       <span *ngIf="patient.isEditing">
-        <mat-form-field appearance="fill" class="patient-birthday-input margin-5" #field>
-          <mat-label>Birthday:</mat-label>
-          <br/>
-          <input matInput [(ngModel)]="patient.birthday" [matDatepicker]="picker">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+        <form [formGroup]="form" novalidate>
+          <mat-form-field appearance="fill" class="patient-birthday-input margin-5" #field>
+            <mat-label>Birthday:</mat-label>
+            <br/>
+            <input matInput [matDatepicker]="picker" id="birthday" placeholder="MM/dd/yyyy" formControlName="birthday">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="showFormError('birthday', 'required')">Birthday is required</mat-error>
+          </mat-form-field>
+        </form>
       </span>
     </td>
   </ng-container>
@@ -53,15 +64,17 @@
     <td mat-cell *matCellDef="let patient" class="patient-field">
       <span *ngIf="!patient.isEditing">{{getPatientGender(patient.gender)}}</span>
       <span *ngIf="patient.isEditing">
-        <mat-form-field appearance="fill" class="margin-5" #field>
-          <mat-label>Gender:</mat-label>
-          <br/>
-          <mat-select [(value)]="patient.gender">
-            <mat-option *ngFor="let patientType of genderEnumValues" [value]=patientType.gender>
-              {{patientType.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <form [formGroup]="form" novalidate>
+          <mat-form-field appearance="fill" class="margin-5" #field>
+            <mat-label>Gender:</mat-label>
+            <br/>
+            <mat-select id="gender" formControlName="gender">
+              <mat-option *ngFor="let patientType of genderEnumValues" [value]=patientType.gender>
+                {{patientType.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </form>
       </span>
     </td>
   </ng-container>
