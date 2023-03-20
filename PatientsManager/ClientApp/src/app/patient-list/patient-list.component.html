@@ -1,97 +1,89 @@
 <!-- Filter -->
-<mat-form-field>
+<mat-form-field class="filter">
   <mat-label>Filter</mat-label>
   <input matInput (keyup)="filterPatients($event)" #filter>
 </mat-form-field>
 
 <!-- Table with patients -->
-<table mat-table matSort [dataSource]="patients" matSortActive="firstName" matSortDirection="asc" class="mat-elevation-z8">
+<mat-table matSort [dataSource]="patients" matSortActive="firstName" matSortDirection="asc" class="mat-elevation-z4">
   <ng-container matColumnDef="firstName">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">First Name</th>
-    <td mat-cell *matCellDef="let patient" class="patient-name">
-      <span *ngIf="!patient.isEditing">{{ patient.firstName }}</span>
-      <span *ngIf="patient.isEditing">
-        <form [formGroup]="form" novalidate>
-          <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
-            <mat-label>First Name:</mat-label>
-            <br/>
-            <input matInput type="text" id="firstName" placeholder="Enter first name" formControlName="firstName">
-            <mat-error *ngIf="showFormError('firstName', 'required')">First name is required</mat-error>
-            <mat-error *ngIf="showFormError('firstName', 'maxlength')">Limit exceed</mat-error>
-          </mat-form-field>
-        </form>
-      </span>
-    </td>
+    <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">First Name</mat-header-cell>
+    <mat-cell *matCellDef="let patient">
+      <span *ngIf="!patient.isEditing" >{{ patient.firstName }}</span>
+      <ng-container *ngIf="patient.isEditing">
+        <mat-form-field [formGroup]="form" appearance="fill" #field>
+          <mat-label>First Name:</mat-label>
+          <br/>
+          <input matInput type="text" id="firstName" placeholder="Enter first name" formControlName="firstName">
+          <mat-error *ngIf="showFormError('firstName', 'required')">First name is required</mat-error>
+          <mat-error *ngIf="showFormError('firstName', 'maxlength')">Limit exceed</mat-error>
+        </mat-form-field>
+      </ng-container>
+    </mat-cell>
   </ng-container>
   <ng-container matColumnDef="lastName">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by last name">Last Name</th>
-    <td mat-cell *matCellDef="let patient" class="patient-name">
+    <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by last name">Last Name</mat-header-cell>
+    <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing">{{ patient.lastName }}</span>
-      <span *ngIf="patient.isEditing">
-        <form [formGroup]="form" novalidate>
-          <mat-form-field appearance="fill" class="patient-name-input margin-5" #field>
-            <mat-label>Last Name:</mat-label>
-            <br/>
-            <input matInput type="text" id="lastName" placeholder="Enter last name" formControlName="lastName">
-            <mat-error *ngIf="showFormError('lastName', 'required')">Last name is required</mat-error>
-            <mat-error *ngIf="showFormError('lastName', 'maxlength')">Limit exceed</mat-error>
-          </mat-form-field>
-        </form>
-      </span>
-    </td>
+      <ng-container *ngIf="patient.isEditing">
+        <mat-form-field [formGroup]="form" appearance="fill" #field>
+          <mat-label>Last Name:</mat-label>
+          <br/>
+          <input matInput type="text" id="lastName" placeholder="Enter last name" formControlName="lastName">
+          <mat-error *ngIf="showFormError('lastName', 'required')">Last name is required</mat-error>
+          <mat-error *ngIf="showFormError('lastName', 'maxlength')">Limit exceed</mat-error>
+        </mat-form-field>
+      </ng-container>
+    </mat-cell>
   </ng-container>
   <ng-container matColumnDef="birthday">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by birthday">Birthday</th>
-    <td mat-cell *matCellDef="let patient" class="patient-field">
+    <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by birthday">Birthday</mat-header-cell>
+    <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing">{{ patient.birthday | date: "MM/dd/yyyy"}}</span>
-      <span *ngIf="patient.isEditing">
-        <form [formGroup]="form" novalidate>
-          <mat-form-field appearance="fill" class="patient-birthday-input margin-5" #field>
-            <mat-label>Birthday:</mat-label>
-            <br/>
-            <input matInput [matDatepicker]="picker" id="birthday" placeholder="MM/dd/yyyy" formControlName="birthday">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="showFormError('birthday', 'required')">Birthday is required</mat-error>
-          </mat-form-field>
-        </form>
-      </span>
-    </td>
+      <ng-container *ngIf="patient.isEditing">
+        <mat-form-field [formGroup]="form" appearance="fill" #field>
+          <mat-label>Birthday:</mat-label>
+          <br/>
+          <input matInput [matDatepicker]="picker" id="birthday" placeholder="MM/dd/yyyy" formControlName="birthday">
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="showFormError('birthday', 'required')">Birthday is required</mat-error>
+        </mat-form-field>
+      </ng-container>
+    </mat-cell>
   </ng-container>
   <ng-container matColumnDef="gender">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gender">Gender</th>
-    <td mat-cell *matCellDef="let patient" class="patient-field">
+    <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gender">Gender</mat-header-cell>
+    <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing">{{getPatientGender(patient.gender)}}</span>
-      <span *ngIf="patient.isEditing">
-        <form [formGroup]="form" novalidate>
-          <mat-form-field appearance="fill" class="margin-5" #field>
-            <mat-label>Gender:</mat-label>
-            <br/>
-            <mat-select id="gender" formControlName="gender">
-              <mat-option *ngFor="let patientType of genderEnumValues" [value]=patientType.gender>
-                {{patientType.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </form>
-      </span>
-    </td>
+      <ng-container *ngIf="patient.isEditing">
+        <mat-form-field [formGroup]="form" appearance="fill" #field>
+          <mat-label>Gender:</mat-label>
+          <br/>
+          <mat-select id="gender" formControlName="gender">
+            <mat-option *ngFor="let patientType of genderEnumValues" [value]=patientType.gender>
+              {{patientType.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+    </mat-cell>
   </ng-container>
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let patient">
+  <ng-container matColumnDef="actions" class="actions">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let patient">
       <button mat-icon-button (click)="updatePatient(patient)">
         <mat-icon aria-hidden="false" color="primary">edit</mat-icon>
       </button>
       <button mat-icon-button (click)="removePatient(patient)">
         <mat-icon aria-hidden="false" color="warn">delete_outline</mat-icon>
       </button>
-    </td>
+    </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="patientTableColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: patientTableColumns;" (click)="onRowClick($event)"></tr>
+  <mat-header-row *matHeaderRowDef="patientTableColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: patientTableColumns;" (click)="onRowClick($event)"></mat-row>
 
   <ng-container >
     <tr class="mat-row" *matNoDataRow>
@@ -100,7 +92,8 @@
       </td>
     </tr>
   </ng-container>
-</table>
+</mat-table>
+
 <mat-paginator [pageSizeOptions]="pageSizeOptions"
                [pageSize]="pageSize"
                [length]="patients.data.length"

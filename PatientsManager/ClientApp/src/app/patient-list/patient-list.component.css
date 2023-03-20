@@ -7,31 +7,13 @@ table {
   width: 100%;
 }
 
-.addPatientDiv {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.addPatientButton, .addPatientActivateButton {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
 mat-radio-button {
   margin-left: 5px;
   margin-right: 5px;
 }
 
-.patient-name {
-  width: 35%;
-}
-
-.patient-name-input {
-  width: 100%;
-}
-
-.patient-field {
-  width: 10%;
+.actions {
+  width: 150px;
 }
 
 .margin-l-25 {
@@ -68,4 +50,77 @@ table ::ng-deep .mat-form-field-flex > .mat-form-field-infix {
 
 table .mat-form-field {
   width: 100%;
+}
+
+.mat-mdc-paginator {
+  display: inline;
+}
+
+.filter {
+  width: 100%;
+}
+
+.mat-column-firstName {
+  word-wrap: break-word;
+  flex: 0 0 27%;
+  width: 27%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-lastName {
+  word-wrap: break-word;
+  flex: 0 0 27%;
+  width: 27%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-birthday {
+  word-wrap: break-word;
+  flex: 0 0 15%;
+  width: 15%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-gender {
+  word-wrap: break-word;
+  flex: 0 0 15%;
+  width: 15%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-actions {
+  word-wrap: break-word;
+  flex: 0 0 15%;
+  width: 15%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }

@@ -25,6 +25,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import { PatientDialogComponent } from './patient-dialog/patient-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {CdkColumnDef} from "@angular/cdk/table";
 
 let rootRoutes: Routes = [
   {path: '', component: PatientsComponent}
@@ -61,7 +62,7 @@ let rootRoutes: Routes = [
     MatSortModule,
     MatDialogModule
   ],
-  providers: [],
+  providers: [CdkColumnDef],
   bootstrap: [AppComponent]
 })
 export class AppModule {
