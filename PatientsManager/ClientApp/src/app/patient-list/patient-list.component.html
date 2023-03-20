@@ -73,12 +73,22 @@
   <ng-container matColumnDef="actions" class="actions">
     <mat-header-cell *matHeaderCellDef></mat-header-cell>
     <mat-cell *matCellDef="let patient">
-      <button mat-icon-button (click)="updatePatient(patient)">
-        <mat-icon aria-hidden="false" color="primary">edit</mat-icon>
-      </button>
-      <button mat-icon-button (click)="removePatient(patient)">
-        <mat-icon aria-hidden="false" color="warn">delete_outline</mat-icon>
-      </button>
+      <ng-container *ngIf="!patient.isEditing">
+        <button mat-icon-button (click)="editPatient(patient)">
+          <mat-icon aria-hidden="false" color="primary">edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="removePatient(patient)">
+          <mat-icon aria-hidden="false" color="warn">delete_outline</mat-icon>
+        </button>
+      </ng-container>
+      <ng-container *ngIf="patient.isEditing">
+        <button mat-icon-button (click)="updatePatient(patient)">
+          <mat-icon aria-hidden="false" color="primary">check</mat-icon>
+        </button>
+        <button mat-icon-button (click)="cancelEditing(patient)">
+          <mat-icon aria-hidden="false" color="warn">close</mat-icon>
+        </button>
+      </ng-container>
     </mat-cell>
   </ng-container>
 

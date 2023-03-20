@@ -82,19 +82,21 @@ export class PatientListComponent {
       });
   }
 
+  editPatient(patient: Patient) {
+    patient.isEditing = !patient.isEditing;
+
+    if (patient.isEditing) {
+      this.form.patchValue({
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+        birthday: patient.birthday,
+        gender: patient.gender
+      });
+    }
+  }
+
   updatePatient(patient: Patient) {
     if (!patient.isEditing || this.form.invalid || !this.patientHasChanged(patient)) {
-      patient.isEditing = !patient.isEditing;
-
-      if (patient.isEditing) {
-        this.form.patchValue({
-          firstName: patient.firstName,
-          lastName: patient.lastName,
-          birthday: patient.birthday,
-          gender: patient.gender
-        });
-      }
-
       return;
     }
 
@@ -131,6 +133,10 @@ export class PatientListComponent {
       }
     });
 
+  }
+
+  cancelEditing(patient: Patient) {
+    patient.isEditing = !patient.isEditing;
   }
 
   getPatientGender(gender: GenderEnum): string {
