@@ -5,13 +5,13 @@
 </mat-form-field>
 
 <!-- Table with patients -->
-<mat-table matSort [dataSource]="patients" matSortActive="firstName" matSortDirection="asc" class="mat-elevation-z4">
+<mat-table matSort [dataSource]="_patients" matSortActive="firstName" matSortDirection="asc" class="mat-elevation-z4">
   <ng-container matColumnDef="firstName">
     <mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by first name">First Name</mat-header-cell>
     <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing" >{{ patient.firstName }}</span>
       <ng-container *ngIf="patient.isEditing">
-        <mat-form-field [formGroup]="form" appearance="fill" #field>
+        <mat-form-field [formGroup]="_form" appearance="fill" #field>
           <mat-label>First Name:</mat-label>
           <br/>
           <input matInput type="text" id="firstName" placeholder="Enter first name" formControlName="firstName">
@@ -26,7 +26,7 @@
     <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing">{{ patient.lastName }}</span>
       <ng-container *ngIf="patient.isEditing">
-        <mat-form-field [formGroup]="form" appearance="fill" #field>
+        <mat-form-field [formGroup]="_form" appearance="fill" #field>
           <mat-label>Last Name:</mat-label>
           <br/>
           <input matInput type="text" id="lastName" placeholder="Enter last name" formControlName="lastName">
@@ -41,7 +41,7 @@
     <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing">{{ patient.birthday | date: "MM/dd/yyyy"}}</span>
       <ng-container *ngIf="patient.isEditing">
-        <mat-form-field [formGroup]="form" appearance="fill" #field>
+        <mat-form-field [formGroup]="_form" appearance="fill" #field>
           <mat-label>Birthday:</mat-label>
           <br/>
           <input matInput [matDatepicker]="picker" id="birthday" placeholder="MM/dd/yyyy" formControlName="birthday">
@@ -58,11 +58,11 @@
     <mat-cell *matCellDef="let patient">
       <span *ngIf="!patient.isEditing">{{getPatientGender(patient.gender)}}</span>
       <ng-container *ngIf="patient.isEditing">
-        <mat-form-field [formGroup]="form" appearance="fill" #field>
+        <mat-form-field [formGroup]="_form" appearance="fill" #field>
           <mat-label>Gender:</mat-label>
           <br/>
           <mat-select id="gender" formControlName="gender">
-            <mat-option *ngFor="let patientType of genderEnumValues" [value]=patientType.gender>
+            <mat-option *ngFor="let patientType of _genderEnumValues" [value]=patientType.gender>
               {{patientType.name}}
             </mat-option>
           </mat-select>
@@ -92,8 +92,8 @@
     </mat-cell>
   </ng-container>
 
-  <mat-header-row *matHeaderRowDef="patientTableColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: patientTableColumns;" (click)="onRowClick($event)"></mat-row>
+  <mat-header-row *matHeaderRowDef="_patientTableColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: _patientTableColumns;" (click)="onRowClick($event)"></mat-row>
 
   <tr class="mat-row" *matNoDataRow>
     <td class="mat-cell" colspan="4">
@@ -102,9 +102,9 @@
   </tr>
 </mat-table>
 
-<mat-paginator [pageSizeOptions]="pageSizeOptions"
-               [pageSize]="pageSize"
-               [length]="patients.data.length"
+<mat-paginator [pageSizeOptions]="_pageSizeOptions"
+               [pageSize]="_pageSize"
+               [length]="_patients.data.length"
                showFirstLastButtons
                aria-label="Select page of patients">
 </mat-paginator>

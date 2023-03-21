@@ -4,7 +4,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from "@angular/material/paginator";
 import {GenderEnum} from "../models/gender";
 import {Patient} from "../models/patient";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {PatientDialogComponent} from "../patient-dialog/patient-dialog.component";
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {PatientService} from "../services/patient.service";
@@ -16,12 +16,11 @@ import {PatientService} from "../services/patient.service";
 })
 export class PatientListComponent {
 
-  public patients = new MatTableDataSource<Patient>();
-  public patientTableColumns = ["firstName", "lastName", "birthday", "gender", "actions"];
-  public pageSizeOptions = [5, 10, 25, 100];
-  public pageSize = 5;
-
-  public genderEnumValues = [
+  public _patients = new MatTableDataSource<Patient>();
+  public _patientTableColumns = ["firstName", "lastName", "birthday", "gender", "actions"];
+  public _pageSizeOptions = [5, 10, 25, 100];
+  public _pageSize = 5;
+  public _genderEnumValues = [
     {
       gender: GenderEnum.Unknown,
       name: "Unknown"
@@ -36,16 +35,18 @@ export class PatientListComponent {
     }
   ];
 
-  @ViewChild(MatTable, {static: false}) table!: MatTable<Patient>;
-  @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatTable, {static: false}) _table!: MatTable<Patient>;
+  @ViewChild(MatSort) _sort!: MatSort;
+  @ViewChild(MatPaginator) _paginator!: MatPaginator;
 
-  public form: FormGroup = new FormGroup({
+  public _form: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     lastName: new FormControl('', [Validators.required, Validators.maxLength(50)]),
     birthday: new FormControl('MM/dd/yyyy', [Validators.required]),
     gender: new FormControl('', [Validators.required])
   });
+
+  public _dialogRef: MatDialogRef<PatientDialogComponent, any> | undefined;
 
   constructor(public _patientService: PatientService, public _dialog: MatDialog) {}
 
@@ -54,8 +55,8 @@ export class PatientListComponent {
   }
 
   ngAfterViewInit() {
-    this.patients.paginator = this.paginator;
-    this.patients.sort = this.sort;
+    this._patients.paginator = this._paginator;
+    this._patients.sort = this._sort;
   }
 
   onRowClick(event: any) {
@@ -64,10 +65,10 @@ export class PatientListComponent {
 
   filterPatients(event: any) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.patients.filter = filterValue.trim().toLowerCase();
+    this._patients.filter = filterValue.trim().toLowerCase();
 
-    if (!!this.patients.paginator) {
-      this.patients.paginator.firstPage();
+    if (!!this._patients.paginator) {
+      this._patients.paginator.firstPage();
     }
   }
 
@@ -75,8 +76,8 @@ export class PatientListComponent {
     this._patientService
       .getAll()
       .subscribe((result: Patient[]) => {
-        this.patients.data = result;
-        this.table.renderRows();
+        this._patients.data = result;
+        this._table.renderRows();
       });
   }
 
@@ -84,7 +85,7 @@ export class PatientListComponent {
     patient.isEditing = !patient.isEditing;
 
     if (patient.isEditing) {
-      this.form.patchValue({
+      this._form.patchValue({
         firstName: patient.firstName,
         lastName: patient.lastName,
         birthday: patient.birthday,
@@ -94,42 +95,52 @@ export class PatientListComponent {
   }
 
   updatePatient(patient: Patient) {
-    if (!patient.isEditing || this.form.invalid || !this.patientHasChanged(patient)) {
+    if (!patient.isEditing || this._form.invalid || !this.patientHasChanged(patient)) {
       return;
     }
 
-    patient.firstName = this.form.get("firstName")?.value;
-    patient.lastName = this.form.get("lastName")?.value;
-    patient.birthday = this.form.get("birthday")?.value;
-    patient.gender = this.form.get("gender")?.value;
+    patient.firstName = this._form.get("firstName")?.value;
+    patient.lastName = this._form.get("lastName")?.value;
+    patient.birthday = this._form.get("birthday")?.value;
+    patient.gender = this._form.get("gender")?.value;
 
     this._patientService
       .update(patient)
       .subscribe(
         () => {
-          let oldPatientIndex = this.patients.data.indexOf(patient);
+          let oldPatientIndex = this._patients.data.indexOf(patient);
           patient.isEditing = false;
-          this.patients.data[oldPatientIndex] = patient;
-          this.patients.data = this.patients.sortData(this.patients.data, this.sort);
-          this.table.renderRows();
+          this._patients.data[oldPatientIndex] = patient;
+          this._patients.data = this._patients.sortData(this._patients.data, this._sort);
+          this._table.renderRows();
         });
   }
 
   removePatient(patient: Patient) {
-    this._dialog.open(PatientDialogComponent, {
+    if (!!this._dialogRef) {
+      return;
+    }
+
+    this._dialogRef = this._dialog.open(PatientDialogComponent, {
       data: {
         title: "Delete Patient",
         content: `You are going to delete data of the patient ${patient.firstName} ${patient.lastName}. Are you sure?`,
-        actionAccepted: () => {
-          this._patientService
-            .delete(patient)
-            .subscribe(() => {
-              this.patients.data = this.patients.data.filter(p => p.id != patient.id);
-              this.table.renderRows();
-            });
-        }
+        requiresResult: true
       }
     });
+    this._dialogRef.afterClosed()
+      .subscribe(value => {
+        this._dialogRef = undefined;
+        if (!value) {
+          return;
+        }
+        this._patientService
+          .delete(patient)
+          .subscribe(() => {
+            this._patients.data = this._patients.data.filter(p => p.id != patient.id);
+            this._table.renderRows();
+          });
+      });
 
   }
 
@@ -138,19 +149,19 @@ export class PatientListComponent {
   }
 
   getPatientGender(gender: GenderEnum): string {
-    const genderValue = this.genderEnumValues.find(p => p.gender === gender) ?? this.genderEnumValues[0];
+    const genderValue = this._genderEnumValues.find(p => p.gender === gender) ?? this._genderEnumValues[0];
     return genderValue.name;
   }
 
   showFormError(controlName: string, errorName: string) {
-    return this.form.controls[controlName].hasError(errorName);
+    return this._form.controls[controlName].hasError(errorName);
   }
 
   patientHasChanged(patient: Patient): boolean {
-    return this.form.get("firstName")?.value !== patient.firstName
-      || this.form.get("lastName")?.value !== patient.lastName
-      || this.form.get("birthday")?.value !== patient.birthday
-      || this.form.get("gender")?.value !== patient.gender;
+    return this._form.get("firstName")?.value !== patient.firstName
+      || this._form.get("lastName")?.value !== patient.lastName
+      || this._form.get("birthday")?.value !== patient.birthday
+      || this._form.get("gender")?.value !== patient.gender;
   }
 }
 

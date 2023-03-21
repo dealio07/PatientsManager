@@ -1,46 +1,51 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { PatientCsvUploaderComponent } from './patient-csv-uploader.component';
-import {HttpClientModule} from "@angular/common/http";
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {PatientCsvUploaderComponent} from './patient-csv-uploader.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import {FileService} from "../services/file.service";
+import {HttpClientModule} from "@angular/common/http";
+import {ErrorHandlerService} from "../services/error-handler.service";
 
 describe('PatientCsvUploaderComponent', () => {
-  let component: PatientCsvUploaderComponent;
-  let fixture: ComponentFixture<PatientCsvUploaderComponent>;
+  let _component: PatientCsvUploaderComponent;
+  let _fixture: ComponentFixture<PatientCsvUploaderComponent>;
+  const _baseUrl = document.getElementsByTagName('base')[0].href;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PatientCsvUploaderComponent ],
+      declarations: [PatientCsvUploaderComponent],
       imports: [
         HttpClientModule,
         MatDialogModule,
       ],
       providers: [
-        {provide: 'BASE_URL', useValue: document.getElementsByTagName('base')[0].href}
+        {provide: 'BASE_URL', useValue: _baseUrl},
+        FileService,
+        ErrorHandlerService
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
-    fixture = TestBed.createComponent(PatientCsvUploaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    _fixture = TestBed.createComponent(PatientCsvUploaderComponent);
+    _component = _fixture.componentInstance;
+    _fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(_component).toBeTruthy();
   });
 
   it('validate file returns true when file is valid', () => {
     const file: File = new File(
       [new Blob(['some content'])],
       'file',
-      {type:'text/csv'});
-    expect(component.validateFile(file)).toBeTruthy();
+      {type: 'text/csv'});
+    expect(_component.validateFile(file)).toBeTruthy();
   });
 
   it('validate file returns false when file is invalid', () => {
     const file: File = new File(
       [new Blob(['some content'])],
       'file');
-    expect(component.validateFile(file)).toBeFalsy();
+    expect(_component.validateFile(file)).toBeFalsy();
   });
 });
