@@ -12,7 +12,8 @@ export class PatientDialogComponent {
   public content: string = "";
   public actionRejected: any;
   public actionAccepted: any;
-  constructor(public dialogRef: MatDialogRef<PatientDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+
+  constructor(public _dialogRef: MatDialogRef<PatientDialogComponent>, @Inject(MAT_DIALOG_DATA) data: DialogData) {
     this.title = data.title;
     this.content = data.content;
     this.actionRejected = data.actionRejected;
@@ -23,14 +24,14 @@ export class PatientDialogComponent {
     if (!!this.actionRejected) {
       this.actionRejected();
     }
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 
   onAccepted() {
     if (!!this.actionAccepted) {
       this.actionAccepted();
     }
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 
   showMoreButtons(): boolean {

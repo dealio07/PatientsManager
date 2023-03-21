@@ -1,5 +1,4 @@
-import {Component, Inject, ViewChild} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {Component, ViewChild} from '@angular/core';
 import {MatTableDataSource, MatTable} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from "@angular/material/paginator";
@@ -7,8 +6,8 @@ import {GenderEnum} from "../models/gender";
 import {Patient} from "../models/patient";
 import {MatDialog} from "@angular/material/dialog";
 import {PatientDialogComponent} from "../patient-dialog/patient-dialog.component";
-import {catchError, Observable, ObservableInput, OperatorFunction} from "rxjs";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {PatientService} from "../services/patient.service";
 
 @Component({
   selector: 'app-patient-list',
@@ -16,7 +15,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./patient-list.component.css']
 })
 export class PatientListComponent {
-  private baseUrlPatients = 'patients';
 
   public patients = new MatTableDataSource<Patient>();
   public patientTableColumns = ["firstName", "lastName", "birthday", "gender", "actions"];
@@ -49,7 +47,7 @@ export class PatientListComponent {
     gender: new FormControl('', [Validators.required])
   });
 
-  constructor(private http: HttpClient, @Inject('BASE_URL') private baseUrl: string, public dialog: MatDialog) {}
+  constructor(public _patientService: PatientService, public _dialog: MatDialog) {}
 
   ngOnInit() {
     this.getPatients();
@@ -74,8 +72,8 @@ export class PatientListComponent {
   }
 
   getPatients() {
-    this.http.get<Patient[]>(`${this.baseUrl}${this.baseUrlPatients}`)
-      .pipe(catchError(this.handleError<Patient[]>))
+    this._patientService
+      .getAll()
       .subscribe((result: Patient[]) => {
         this.patients.data = result;
         this.table.renderRows();
@@ -105,8 +103,8 @@ export class PatientListComponent {
     patient.birthday = this.form.get("birthday")?.value;
     patient.gender = this.form.get("gender")?.value;
 
-    this.http.put(`${this.baseUrl}${this.baseUrlPatients}/update/${patient.id}`, patient)
-      .pipe(catchError(this.handleError<Object>))
+    this._patientService
+      .update(patient)
       .subscribe(
         () => {
           let oldPatientIndex = this.patients.data.indexOf(patient);
@@ -118,13 +116,13 @@ export class PatientListComponent {
   }
 
   removePatient(patient: Patient) {
-    this.dialog.open(PatientDialogComponent, {
+    this._dialog.open(PatientDialogComponent, {
       data: {
         title: "Delete Patient",
         content: `You are going to delete data of the patient ${patient.firstName} ${patient.lastName}. Are you sure?`,
         actionAccepted: () => {
-          this.http.post(`${this.baseUrl}${this.baseUrlPatients}/delete/${patient.id}`, null)
-            .pipe(catchError(this.handleError<Object>))
+          this._patientService
+            .delete(patient)
             .subscribe(() => {
               this.patients.data = this.patients.data.filter(p => p.id != patient.id);
               this.table.renderRows();
@@ -154,16 +152,6 @@ export class PatientListComponent {
       || this.form.get("birthday")?.value !== patient.birthday
       || this.form.get("gender")?.value !== patient.gender;
   }
-
-  handleError = <T>(err: any, caught: Observable<T>): ObservableInput<T> => {
-    this.dialog.open(PatientDialogComponent, {
-      data: {
-        title: 'Error',
-        content: err.error
-      }
-    });
-    return caught;
-  };
 }
 
 

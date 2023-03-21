@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientsManager.Models;
 using PatientsManager.Services.Abstraction;
@@ -28,26 +27,7 @@ namespace PatientsManager.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Error during retrieval of all patients");
-            }
-        }
-
-        [HttpPost("upload-csv")]
-        public async Task<IActionResult> SavePatients(IFormFile file)
-        {
-            if (file == null)
-            {
-                return BadRequest("No file was sent");
-            }
-
-            try
-            {
-                await _patientService.CreatePatients(file);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest("Error during file upload");
+                return BadRequest("Error trying to get all patients");
             }
         }
 
@@ -68,11 +48,11 @@ namespace PatientsManager.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Error during patient update");
+                return BadRequest("Error trying to update patient");
             }
         }
 
-        [HttpPost("delete/{id:length(24)}")]
+        [HttpDelete("delete/{id:length(24)}")]
         public async Task<IActionResult> Delete(string id)
         {
             try
@@ -89,7 +69,7 @@ namespace PatientsManager.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest("Error during patient delete");
+                return BadRequest("Error trying to delete patient");
             }
         }
     }

@@ -3,6 +3,8 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule, Routes} from '@angular/router';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {CdkColumnDef} from "@angular/cdk/table";
 
 import {AppComponent} from './app.component';
 import {NavMenuComponent} from './nav-menu/nav-menu.component';
@@ -10,11 +12,11 @@ import {PatientsComponent} from './patients/patients.component';
 import {PatientCsvUploaderComponent} from './patient-csv-uploader/patient-csv-uploader.component';
 import {PatientListComponent} from './patient-list/patient-list.component';
 import {PatientDialogComponent} from './patient-dialog/patient-dialog.component';
+
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
 import {MatCardModule} from "@angular/material/card";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTableModule} from "@angular/material/table";
 import {MatGridListModule} from "@angular/material/grid-list";
@@ -25,7 +27,10 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatSortModule} from "@angular/material/sort";
 import {MatDialogModule} from "@angular/material/dialog";
-import {CdkColumnDef} from "@angular/cdk/table";
+
+import {PatientService} from "./services/patient.service";
+import {FileService} from "./services/file.service";
+import {ErrorHandlerService} from "./services/error-handler.service";
 
 let rootRoutes: Routes = [
   {path: '', component: PatientsComponent}
@@ -62,7 +67,12 @@ let rootRoutes: Routes = [
     MatSortModule,
     MatDialogModule
   ],
-  providers: [CdkColumnDef],
+  providers: [
+    CdkColumnDef,
+    PatientService,
+    FileService,
+    ErrorHandlerService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
